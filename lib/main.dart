@@ -33,23 +33,16 @@ class _MyAppState extends State<MyApp> {
       // print("Client publicccc key: $clientPublicKey");
 
       //1️⃣ Establish session with backend
-      final (sessionId, aesKey) = await ecdhService.establishSession("http://192.168.60.212:5000");
+      final (sessionId, aesKey) = await ecdhService.establishSession("http://192.168.60.56:5000");
 
       //2️⃣ Save session securely
       await SecureStore.saveSession(sessionId, aesKey);
 
       //3️⃣ Create secure HTTP client
-      final apiClient = SecureHttpClient(
-        baseUrl: "http://192.168.60.212:5000",
-        sessionId: sessionId,
-        aesKey: aesKey,
-      );
+      final apiClient = SecureHttpClient(baseUrl: "http://192.168.60.56:5000", sessionId: sessionId, aesKey: aesKey);
 
       // 4️⃣ Make an encrypted request
-      final response = await apiClient.post("/api/secure", {
-        "name": "Vinura",
-        "role": "flutter"
-      });
+      final response = await apiClient.post("/api/secure", {"name": "Vinura", "role": "flutter"});
 
       setState(() {
         _serverResponse = response.toString();
@@ -67,17 +60,11 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Flutter Secure API Demo',
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Flutter AES-GCM + ECDH Demo'),
-        ),
+        appBar: AppBar(title: const Text('Flutter AES-GCM + ECDH Demo')),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Text(
-              _serverResponse,
-              style: const TextStyle(fontSize: 18),
-              textAlign: TextAlign.center,
-            ),
+            child: Text(_serverResponse, style: const TextStyle(fontSize: 18), textAlign: TextAlign.center),
           ),
         ),
       ),
