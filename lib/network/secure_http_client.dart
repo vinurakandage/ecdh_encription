@@ -31,6 +31,14 @@ class SecureHttpClient {
       body: jsonEncode(encrypted),
     );
 
+    if (res.statusCode != 200) {
+      throw Exception("Server error: ${res.statusCode} ${res.body}");
+    }
+
+    if (res.body.isEmpty) {
+      throw Exception("Empty response from server");
+    }
+
     // Decrypt response
     final decrypted = await AesGcmService.decrypt(
       payload: jsonDecode(res.body),

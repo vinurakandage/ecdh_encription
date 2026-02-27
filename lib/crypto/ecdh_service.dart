@@ -69,7 +69,11 @@ class EcdhService {
     final y = serverBytes.sublist(33, 65);
 
     // ✅ Create EcPublicKey (NOT SimplePublicKey)
-    final serverPublicKey = EcPublicKey(x: x, y: y, type: KeyPairType.p256);
+    final serverPublicKey = EcPublicKey(
+      x: x,
+      y: y,
+      type: KeyPairType.p256,
+    );
 
     // 3️⃣ Compute shared secret
     final sharedSecret = await _ecdh.sharedSecretKey(keyPair: keyPair, remotePublicKey: serverPublicKey);
